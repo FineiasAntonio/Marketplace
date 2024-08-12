@@ -2,7 +2,7 @@ package com.fineias.marketplace.auth.service;
 
 import com.fineias.marketplace.auth.dto.LoginRequestDTO;
 import com.fineias.marketplace.auth.dto.RegisterRequestDTO;
-import com.fineias.marketplace.auth.exception.AccountNotFoundException;
+import com.fineias.marketplace.auth.exception.AccountAlreadyExistsException;
 import com.fineias.marketplace.user.enums.Role;
 import com.fineias.marketplace.user.model.User;
 import com.fineias.marketplace.user.repository.UserRepository;
@@ -28,7 +28,7 @@ public class AuthenticationService {
     public String registerNewUser(RegisterRequestDTO registerRequest) {
 
         if (userRepository.existsByEmail(registerRequest.email())) {
-            throw new AccountNotFoundException();
+            throw new AccountAlreadyExistsException();
         }
 
         User registeredUser = userRepository.save(
