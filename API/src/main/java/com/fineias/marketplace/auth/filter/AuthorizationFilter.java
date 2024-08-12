@@ -23,7 +23,8 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-        if (request.getRequestURL().toString().contains("/login")) {
+        String requestUrl = request.getRequestURI();
+        if (requestUrl.contains("/register") || requestUrl.contains("/login")) {
             filterChain.doFilter(request, response);
             return;
         }
