@@ -1,6 +1,5 @@
 package com.fineias.marketplace.auth.config;
 
-import com.fineias.marketplace.auth.filter.AuthorizationFilter;
 import com.fineias.marketplace.auth.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
-    private final AuthorizationFilter authorizationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,9 +27,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorization -> authorization
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-//                .addFilterAfter(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

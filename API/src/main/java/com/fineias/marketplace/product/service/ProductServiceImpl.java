@@ -7,10 +7,8 @@ import com.fineias.marketplace.product.repository.ProductRepository;
 import com.fineias.marketplace.user.model.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -49,8 +47,8 @@ public class ProductServiceImpl implements ProductService {
         var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
            authenticatedUser = (User) principal;
-        } else {
-            throw new RuntimeException("Autenticação não identificada, objeto não criado");
+        } else  {
+            throw new RuntimeException("Principal isn't a instance of User");
         }
 
         Product product = Product

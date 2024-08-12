@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,7 +27,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (request.getRequestURL().toString().contains("register")){
+        String requestUrl = request.getRequestURI();
+        if (requestUrl.contains("/register") || requestUrl.contains("/login")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -39,6 +41,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken auth = UsernamePasswordAuthenticationToken.authenticated(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
+        } else {
+
         }
         filterChain.doFilter(request, response);
 

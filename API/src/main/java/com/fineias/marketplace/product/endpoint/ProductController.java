@@ -17,8 +17,8 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<Product> findSingleProduct(@PathVariable("productId") UUID productId) {
+    @GetMapping
+    public ResponseEntity<Product> findSingleProduct(@RequestParam(name = "productId") UUID productId) {
 
         Product productFound = productService.findProduct(productId);
         return ResponseEntity.status(HttpStatus.OK).body(productFound);
