@@ -32,6 +32,12 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address;
 
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "cart_id")
+//    private Cart cart;
+
+    private UUID cartId;
+
     // Auth attribuites
     private String email;
     @JsonIgnore
@@ -69,4 +75,8 @@ public class User implements UserDetails {
     public String getUsername() {
         return this.email;
     }
+
+
+
+
 }

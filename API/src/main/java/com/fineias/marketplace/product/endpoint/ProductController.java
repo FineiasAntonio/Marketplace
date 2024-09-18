@@ -2,6 +2,7 @@ package com.fineias.marketplace.product.endpoint;
 
 import com.fineias.marketplace.product.dto.ProductRegisterRequestDTO;
 import com.fineias.marketplace.product.dto.ProductSummaryResponseDTO;
+import com.fineias.marketplace.user.dto.ProductToCartDTO;
 import com.fineias.marketplace.product.model.Product;
 import com.fineias.marketplace.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
