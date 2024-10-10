@@ -34,8 +34,6 @@ public class AuthenticationService {
             throw new AccountAlreadyExistsException();
         }
 
-
-
         User registeredUser = userRepository.save(
                 User.builder()
                         .name(registerRequest.name())

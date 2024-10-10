@@ -5,19 +5,15 @@ import com.fineias.marketplace.user.model.Cart;
 import com.fineias.marketplace.user.model.CartItem;
 import com.fineias.marketplace.user.model.User;
 import com.fineias.marketplace.user.repository.CartRepository;
-import com.fineias.marketplace.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-
 @Service
 @RequiredArgsConstructor
 public class CartService {
 
-    private final UserRepository userRepository;
     private final CartRepository cartRepository;
 
     @Transactional
@@ -36,9 +32,9 @@ public class CartService {
 
         userCart.addItems(new CartItem(productToCartDTO.productId(), productToCartDTO.quantity()));
 
-//        Cart savedCart = authenticatedUser.getCart().addItems(new CartItem(productToCartDTO.productId(), productToCartDTO.quantity()));
+        System.out.println(userCart);
+
         cartRepository.save(userCart);
-//        System.out.println(userRepository.save(authenticatedUser));
 
     }
 

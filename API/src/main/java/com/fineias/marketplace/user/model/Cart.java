@@ -15,20 +15,12 @@ import java.util.*;
 @Table(name = "carts")
 public class Cart {
 
-    @Transient
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID cartId;
 
-    @Transient
-    private List<CartItem> productList = new LinkedList<>();
-
-    @Column(columnDefinition = "jsonb", name = "product_list")
-    @Getter(AccessLevel.PROTECTED)
-    @Setter(AccessLevel.PROTECTED)
-    private String jsonProductList = "";
+    @OneToMany(mappedBy = "cartId")
+    private List<CartItem> productList;
 
     public void addItems(CartItem cartItem) {
         this.productList.add(cartItem);
@@ -44,27 +36,6 @@ public class Cart {
 
         this.productList.remove(cartItemFound.get());
 
-    }
-
-    @PostLoad
-    private void instantiateProductList() {
-        try {
-            System.out.println("foi instanciado");
-            this.productList = objectMapper.readValue(this.jsonProductList, objectMapper.getTypeFactory().constructCollectionType(List.class, CartItem.class));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error while parsing attribute");
-        }
-    }
-
-    @PrePersist
-    @PreUpdate
-    private void writeProductList() {
-        try {
-            System.out.println("foi escrito");
-            this.jsonProductList = objectMapper.writeValueAsString(this.productList);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error while parsing attribute");
-        }
     }
 
 }
