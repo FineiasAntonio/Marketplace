@@ -4,7 +4,6 @@ import com.fineias.marketplace.auth.dto.LoginRequestDTO;
 import com.fineias.marketplace.auth.dto.RegisterRequestDTO;
 import com.fineias.marketplace.auth.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package com.fineias.marketplace.user.model;
+package com.fineias.marketplace.user.core.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

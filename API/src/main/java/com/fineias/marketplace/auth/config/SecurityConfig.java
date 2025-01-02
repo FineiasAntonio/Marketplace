@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorization -> authorization
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/product/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .anyRequest().permitAll()) // Only to tests
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

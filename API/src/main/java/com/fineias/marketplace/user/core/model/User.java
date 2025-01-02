@@ -1,7 +1,7 @@
-package com.fineias.marketplace.user.model;
+package com.fineias.marketplace.user.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fineias.marketplace.user.enums.Role;
+import com.fineias.marketplace.user.core.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,13 +28,14 @@ public class User implements UserDetails {
     private UUID userId;
 
     private String name;
-    private String identity;
+    private String documentNumber;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address;
 
-    private UUID cartId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
-    // Auth attribuites
     private String email;
     @JsonIgnore
     private String password;

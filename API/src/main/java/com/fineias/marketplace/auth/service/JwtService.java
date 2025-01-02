@@ -3,7 +3,7 @@ package com.fineias.marketplace.auth.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fineias.marketplace.auth.dto.LoginRequestDTO;
-import com.fineias.marketplace.user.model.User;
+import com.fineias.marketplace.user.core.model.User;
 import com.fineias.marketplace.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,10 +1,11 @@
-package com.fineias.marketplace.product.dto;
+package com.fineias.marketplace.product.core.dto;
 
 public record ProductRegisterRequestDTO(
         String productName,
         String category,
         String description,
-        Integer price,
-        Integer storage
+        Float price,
+        Integer storage,
+        Boolean activated
 ) {
 }

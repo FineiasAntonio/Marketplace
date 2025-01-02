@@ -1,4 +1,4 @@
-package com.fineias.marketplace.user.enums;
+package com.fineias.marketplace.user.core.enums;
 
 public enum Role {
 

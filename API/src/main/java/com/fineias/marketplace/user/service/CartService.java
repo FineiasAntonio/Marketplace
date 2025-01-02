@@ -1,38 +1,54 @@
 package com.fineias.marketplace.user.service;
 
-import com.fineias.marketplace.user.dto.ProductToCartDTO;
-import com.fineias.marketplace.user.model.Cart;
-import com.fineias.marketplace.user.model.CartItem;
-import com.fineias.marketplace.user.model.User;
+import com.fineias.marketplace.product.gateway.ProductGateway;
+import com.fineias.marketplace.user.core.dto.ProductCartDetailsDTO;
+import com.fineias.marketplace.user.core.model.Cart;
+import com.fineias.marketplace.user.core.model.CartItem;
+import com.fineias.marketplace.user.exception.CartNotFoundException;
+import com.fineias.marketplace.user.exception.ProductNotFoundInCartException;
+import com.fineias.marketplace.user.repository.CartItemRepository;
 import com.fineias.marketplace.user.repository.CartRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+import java.util.UUID;
+
 @Service
-@RequiredArgsConstructor
+@Log4j2
 public class CartService {
 
-    private final CartRepository cartRepository;
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
+    private CartItemRepository cartItemRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductGateway productGateway;
 
     @Transactional
-    public void putItemsCart(ProductToCartDTO productToCartDTO) {
+    public void putItemsCart(ProductCartDetailsDTO productCartDetailsDTO) {
 
-        Cart userCart;
+        Cart userCart = cartRepository.findById(userService.getAuthenticatedUser().getCart().getCartId())
+                .orElseThrow(() -> new RuntimeException("couldn't possible to get cart with this ID"));
 
-        User authenticatedUser;
-        var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof User) {
-            authenticatedUser = (User) principal;
-            userCart = cartRepository.findById(authenticatedUser.getCartId()).get();
-        } else {
-            throw new RuntimeException("Principal isn't a instance of User");
+        productGateway.verifyProductStorage(productCartDetailsDTO.productId(), productCartDetailsDTO.quantity());
+
+        cartItemRepository.save(new CartItem(userCart, productCartDetailsDTO.productId(), productCartDetailsDTO.quantity()));
+    }
+
+    @Transactional
+    public void removeCartItems(UUID productId) {
+
+        Cart userCart = cartRepository.findById(userService.getAuthenticatedUser().getCart().getCartId())
+                .orElseThrow(CartNotFoundException::new);
+
+        if (!userCart.getProductList().removeIf(item -> Objects.equals(item.getProductId(), productId))) {
+            throw new RuntimeException("An error has occured");
         }
-
-        userCart.addItems(new CartItem(productToCartDTO.productId(), productToCartDTO.quantity()));
-
-        System.out.println(userCart);
 
         cartRepository.save(userCart);
 

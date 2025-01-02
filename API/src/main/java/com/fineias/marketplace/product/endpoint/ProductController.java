@@ -1,9 +1,9 @@
 package com.fineias.marketplace.product.endpoint;
 
-import com.fineias.marketplace.product.dto.ProductRegisterRequestDTO;
-import com.fineias.marketplace.product.dto.ProductSummaryResponseDTO;
-import com.fineias.marketplace.user.dto.ProductToCartDTO;
-import com.fineias.marketplace.product.model.Product;
+import com.fineias.marketplace.product.core.dto.ProductRegisterRequestDTO;
+import com.fineias.marketplace.product.core.dto.ProductSummaryResponseDTO;
+import com.fineias.marketplace.product.core.dto.ProductUpdateRequestDTO;
+import com.fineias.marketplace.product.core.model.Product;
 import com.fineias.marketplace.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,15 +26,14 @@ public class ProductController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ) {
-
-        Page<ProductSummaryResponseDTO> response = productService.findBySearchTerm(searchTerm, page, pageSize);
+        Page<ProductSummaryResponseDTO> response = productService.findProductByKeyword(searchTerm, page, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> findSingleProduct(@PathVariable(name = "productId") UUID productId) {
+    public ResponseEntity<Product> findProductById(@PathVariable(name = "productId") UUID productId) {
 
-        Product productFound = productService.findProduct(productId);
+        Product productFound = productService.findProductById(productId);
         return ResponseEntity.status(HttpStatus.OK).body(productFound);
 
     }
@@ -45,6 +44,15 @@ public class ProductController {
         UUID createdProductId = productService.registerProduct(productRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProductId);
 
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> updateProduct(
+            @RequestParam(name = "productId") UUID productId,
+            @RequestBody ProductUpdateRequestDTO productUpdateRequest
+    ) {
+        productService.updateProduct(productId, productUpdateRequest);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

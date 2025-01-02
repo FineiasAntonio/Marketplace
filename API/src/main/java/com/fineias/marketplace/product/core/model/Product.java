@@ -1,4 +1,4 @@
-package com.fineias.marketplace.product.model;
+package com.fineias.marketplace.product.core.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.UUID;
 
@@ -25,9 +26,11 @@ public class Product {
     private String category;
     private String description;
     private UUID sellerId;
+//    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    private int price;
+    private BigDecimal price;
     private int storage;
+    private boolean isActivated;
 
 
 }

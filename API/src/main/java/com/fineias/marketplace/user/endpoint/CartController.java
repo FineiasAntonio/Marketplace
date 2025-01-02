@@ -1,6 +1,6 @@
 package com.fineias.marketplace.user.endpoint;
 
-import com.fineias.marketplace.user.dto.ProductToCartDTO;
+import com.fineias.marketplace.user.core.dto.ProductCartDetailsDTO;
 import com.fineias.marketplace.user.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,9 +18,9 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping
-    public ResponseEntity<Void> putProductInCart(@RequestBody ProductToCartDTO productToCartDTO) {
+    public ResponseEntity<Void> putProductInCart(@RequestBody ProductCartDetailsDTO productCartDetails) {
 
-        cartService.putItemsCart(productToCartDTO);
+        cartService.putItemsCart(productCartDetails);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }

@@ -3,9 +3,9 @@ package com.fineias.marketplace.auth.service;
 import com.fineias.marketplace.auth.dto.LoginRequestDTO;
 import com.fineias.marketplace.auth.dto.RegisterRequestDTO;
 import com.fineias.marketplace.auth.exception.AccountAlreadyExistsException;
-import com.fineias.marketplace.user.enums.Role;
-import com.fineias.marketplace.user.model.Cart;
-import com.fineias.marketplace.user.model.User;
+import com.fineias.marketplace.user.core.enums.Role;
+import com.fineias.marketplace.user.core.model.Cart;
+import com.fineias.marketplace.user.core.model.User;
 import com.fineias.marketplace.user.repository.CartRepository;
 import com.fineias.marketplace.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -39,7 +39,7 @@ public class AuthenticationService {
                         .name(registerRequest.name())
                         .email(registerRequest.email())
                         .role(Role.USER)
-                        .cartId(cartRepository.save(new Cart()).getCartId())
+                        .cart(cartRepository.save(new Cart()))
                         .password(passwordEncoder.encode(registerRequest.password())).build()
         );
 

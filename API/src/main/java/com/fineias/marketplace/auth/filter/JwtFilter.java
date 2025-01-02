@@ -1,16 +1,14 @@
 package com.fineias.marketplace.auth.filter;
 
 import com.fineias.marketplace.auth.service.JwtService;
-import com.fineias.marketplace.user.model.User;
+import com.fineias.marketplace.user.core.model.User;
 import com.fineias.marketplace.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,7 +26,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String requestUrl = request.getRequestURI();
-        if (requestUrl.contains("/register") || requestUrl.contains("/login")) {
+        if (requestUrl.contains("/register") || requestUrl.contains("/login") || requestUrl.contains("/swagger")) {
             filterChain.doFilter(request, response);
             return;
         }
