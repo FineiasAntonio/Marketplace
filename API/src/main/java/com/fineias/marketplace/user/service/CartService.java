@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -41,17 +42,25 @@ public class CartService {
     }
 
     @Transactional
-    public void removeCartItems(UUID productId) {
+    public void removeCartItems(UUID productSequenceId) {
 
         Cart userCart = cartRepository.findById(userService.getAuthenticatedUser().getCart().getCartId())
                 .orElseThrow(CartNotFoundException::new);
 
-        if (!userCart.getProductList().removeIf(item -> Objects.equals(item.getProductId(), productId))) {
-            throw new RuntimeException("An error has occured");
-        }
-
-        cartRepository.save(userCart);
-
+        cartItemRepository.deleteById(productSequenceId);
     }
 
+    @Transactional
+    public void updateItemQuantity(UUID itemCartId, Integer quantity) {
+
+        Cart userCart = cartRepository.findById(userService.getAuthenticatedUser().getCart().getCartId())
+                .orElseThrow(CartNotFoundException::new);
+
+        if (userCart.getProductList().stream().noneMatch(item -> item.getCartItemId().equals(itemCartId))) {
+            throw new ProductNotFoundInCartException();
+        }
+
+        cartItemRepository.updateItemQuantity(itemCartId, quantity);
+
+    }
 }

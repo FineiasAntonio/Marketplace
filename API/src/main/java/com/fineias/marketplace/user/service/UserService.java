@@ -1,5 +1,7 @@
 package com.fineias.marketplace.user.service;
 
+import com.fineias.marketplace.user.core.model.Cart;
+import com.fineias.marketplace.user.core.model.CartItem;
 import com.fineias.marketplace.user.core.model.User;
 import com.fineias.marketplace.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

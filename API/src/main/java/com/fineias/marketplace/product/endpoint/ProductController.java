@@ -6,6 +6,7 @@ import com.fineias.marketplace.product.core.dto.ProductUpdateRequestDTO;
 import com.fineias.marketplace.product.core.model.Product;
 import com.fineias.marketplace.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/product")
 public class ProductController {
 
-    private final ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping
     public ResponseEntity<Page<ProductSummaryResponseDTO>> findBySearchTerm(
@@ -35,7 +36,6 @@ public class ProductController {
 
         Product productFound = productService.findProductById(productId);
         return ResponseEntity.status(HttpStatus.OK).body(productFound);
-
     }
 
     @PostMapping
@@ -43,7 +43,6 @@ public class ProductController {
 
         UUID createdProductId = productService.registerProduct(productRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProductId);
-
     }
 
     @PutMapping

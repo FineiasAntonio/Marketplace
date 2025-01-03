@@ -18,8 +18,8 @@ import java.util.UUID;
 public class CartItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int cartItemId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID cartItemId;
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
