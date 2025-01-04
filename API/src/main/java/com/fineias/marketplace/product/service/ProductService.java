@@ -6,7 +6,7 @@ import com.fineias.marketplace.product.core.dto.ProductUpdateRequestDTO;
 import com.fineias.marketplace.product.exception.ProductNotFoundException;
 import com.fineias.marketplace.product.core.model.Product;
 import com.fineias.marketplace.product.repository.ProductRepository;
-import com.fineias.marketplace.user.gateway.UserGateway;
+import com.fineias.marketplace.user.gateway.port.UserPort;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,7 +27,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private UserGateway userGateway;
+    private UserPort userPort;
 
     public Page<ProductSummaryResponseDTO> findProductByKeyword(String searchTerm, int page, int size) {
 
@@ -57,7 +58,7 @@ public class ProductService {
                 .description(registerRequest.description())
                 .price(BigDecimal.valueOf(registerRequest.price()))
                 .storage(registerRequest.storage())
-                .sellerId(userGateway.getAuthenticatedUserDetails().userId())
+                .sellerId(userPort.getAuthenticatedUserId())
                 .createdAt(Date.valueOf(LocalDate.now()))
                 .isActivated(registerRequest.activated())
                 .build();

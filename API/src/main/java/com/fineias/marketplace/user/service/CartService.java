@@ -1,6 +1,6 @@
 package com.fineias.marketplace.user.service;
 
-import com.fineias.marketplace.product.gateway.ProductGateway;
+import com.fineias.marketplace.product.gateway.port.ProductPort;
 import com.fineias.marketplace.user.core.dto.ProductCartDetailsDTO;
 import com.fineias.marketplace.user.core.model.Cart;
 import com.fineias.marketplace.user.core.model.CartItem;
@@ -13,8 +13,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -28,7 +26,7 @@ public class CartService {
     @Autowired
     private UserService userService;
     @Autowired
-    private ProductGateway productGateway;
+    private ProductPort productPort;
 
     @Transactional
     public void putItemsCart(ProductCartDetailsDTO productCartDetailsDTO) {
@@ -36,7 +34,7 @@ public class CartService {
         Cart userCart = cartRepository.findById(userService.getAuthenticatedUser().getCart().getCartId())
                 .orElseThrow(() -> new RuntimeException("couldn't possible to get cart with this ID"));
 
-        productGateway.verifyProductStorage(productCartDetailsDTO.productId(), productCartDetailsDTO.quantity());
+        productPort.verifyProductStorage(productCartDetailsDTO.productId(), productCartDetailsDTO.quantity());
 
         cartItemRepository.save(new CartItem(userCart, productCartDetailsDTO.productId(), productCartDetailsDTO.quantity()));
     }
@@ -56,11 +54,13 @@ public class CartService {
         Cart userCart = cartRepository.findById(userService.getAuthenticatedUser().getCart().getCartId())
                 .orElseThrow(CartNotFoundException::new);
 
-        if (userCart.getProductList().stream().noneMatch(item -> item.getCartItemId().equals(itemCartId))) {
-            throw new ProductNotFoundInCartException();
-        }
+        CartItem cartItem = userCart.getProductList().stream()
+                .filter(item -> item.getCartItemId().equals(itemCartId))
+                .findFirst()
+                .orElseThrow(ProductNotFoundInCartException::new);
+
+        productPort.verifyProductStorage(cartItem.getProductId(), quantity);
 
         cartItemRepository.updateItemQuantity(itemCartId, quantity);
-
     }
 }

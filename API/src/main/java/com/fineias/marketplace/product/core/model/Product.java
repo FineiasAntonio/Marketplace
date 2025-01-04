@@ -26,7 +26,6 @@ public class Product {
     private String category;
     private String description;
     private UUID sellerId;
-//    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     private BigDecimal price;
     private int storage;
