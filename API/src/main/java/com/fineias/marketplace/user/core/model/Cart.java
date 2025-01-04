@@ -19,7 +19,4 @@ public class Cart {
 
     @OneToMany(mappedBy = "cartId")
     private List<CartItem> productList; // maybe, after i can implement binary search
-
-
-
 }

@@ -29,6 +29,15 @@ public class Product {
     private Date createdAt;
     private BigDecimal price;
     private int storage;
+    private float rating;
+
+    @ElementCollection
+    @CollectionTable(name = "product_medias", joinColumns = @JoinColumn(name = "product_id"))
+    private String[] medias;
+
+    @OneToMany(mappedBy = "commentId")
+    private Comments[] comments;
+
     private boolean isActivated;
 
 

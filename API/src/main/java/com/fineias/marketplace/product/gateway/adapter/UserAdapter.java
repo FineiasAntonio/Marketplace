@@ -26,5 +26,4 @@ public class UserAdapter implements UserPort {
             throw new RuntimeException("Principal isn't a instance of User");
         }
     }
-
 }

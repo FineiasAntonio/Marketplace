@@ -22,7 +22,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Page<ProductSummaryResponseDTO>> findBySearchTerm(
+    public ResponseEntity<Page<ProductSummaryResponseDTO>> findByKeyword(
             @RequestParam(name = "searchTerm") String searchTerm,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
