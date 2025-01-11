@@ -1,4 +1,4 @@
-package com.fineias.marketplace.user.gateway.adapter;
+package com.fineias.marketplace.order.gateway;
 
 import com.fineias.marketplace.product.core.model.Product;
 import com.fineias.marketplace.product.exception.ProductInsufficientStorageExeception;
@@ -6,13 +6,11 @@ import com.fineias.marketplace.product.exception.ProductNotFoundException;
 import com.fineias.marketplace.product.gateway.port.ProductPort;
 import com.fineias.marketplace.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
-@Component
-public class ProductAdapter implements ProductPort {
+public class ProductGateway implements ProductPort {
 
     @Autowired
     private ProductRepository productRepository;
@@ -36,5 +34,4 @@ public class ProductAdapter implements ProductPort {
     public List<Product> getUserSelledProducts(UUID userId) {
         return productRepository.findBySeller(userId);
     }
-
 }

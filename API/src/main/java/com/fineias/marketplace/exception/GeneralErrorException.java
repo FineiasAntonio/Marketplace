@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class GeneralErrorException extends RuntimeException {
-    public GeneralErrorException() {
-        super("An error has occurred");
+    public GeneralErrorException(Throwable cause) {
+        super("An error has occurred" + cause.getMessage());
     }
 }

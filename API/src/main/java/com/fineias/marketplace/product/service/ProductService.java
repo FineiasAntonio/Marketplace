@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -58,7 +57,7 @@ public class ProductService {
                 .description(registerRequest.description())
                 .price(BigDecimal.valueOf(registerRequest.price()))
                 .storage(registerRequest.storage())
-                .sellerId(userPort.getAuthenticatedUserId())
+                .sellerId(userPort.getAuthenticatedUser().getUserId())
                 .createdAt(Date.valueOf(LocalDate.now()))
                 .isActivated(registerRequest.activated())
                 .build();

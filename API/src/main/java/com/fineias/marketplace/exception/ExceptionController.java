@@ -2,6 +2,7 @@ package com.fineias.marketplace.exception;
 
 import com.fineias.marketplace.exception.main.BadRequestException;
 import com.fineias.marketplace.exception.main.ConflictException;
+import com.fineias.marketplace.exception.main.ForbiddenException;
 import com.fineias.marketplace.exception.main.NotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,12 @@ public class ExceptionController {
     public ResponseEntity<ErrorDTO> handleException(ConflictException e) {
         log.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDTO(e.getMessage(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorDTO> handleException(ForbiddenException e) {
+        log.error(e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorDTO(e.getMessage(), LocalDateTime.now()));
     }
 
     @ExceptionHandler(GeneralErrorException.class)
