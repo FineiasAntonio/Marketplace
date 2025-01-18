@@ -1,7 +1,9 @@
 package com.fineias.payment.MarketplacePaymentService.producer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadopago.resources.payment.Payment;
+import com.fineias.payment.MarketplacePaymentService.dto.CreateOrderResponse;
+import com.fineias.payment.MarketplacePaymentService.dto.UpdateOrderResponse;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,8 +19,23 @@ public class PaymentResponseProducer {
     private static final String CREATE_ORDER_RESPONSE_EXCHANGE = "create-order-response-exchange";
     private static final String CREATE_ORDER_RESPONSE_KEY = "create-order-response-key";
 
-    public void createOrderResponseProducer(Payment payment) {
+    private static final String UPDATE_ORDER_RESPONSE_EXCHANGE = "update-order-response-exchange";
+    private static final String UPDATE_ORDER_RESPONSE_KEY = "update-order-response-key";
 
+    public void createOrderResponseProduce(CreateOrderResponse createOrderResponse) throws JsonProcessingException {
+        amqpTemplate.convertAndSend(
+                CREATE_ORDER_RESPONSE_EXCHANGE,
+                CREATE_ORDER_RESPONSE_KEY,
+                objectMapper.writeValueAsString(createOrderResponse)
+        );
+    }
+
+    public void updateOrderResponseProduce(UpdateOrderResponse updateOrderResponse) throws JsonProcessingException {
+        amqpTemplate.convertAndSend(
+                UPDATE_ORDER_RESPONSE_EXCHANGE,
+                UPDATE_ORDER_RESPONSE_KEY,
+                objectMapper.writeValueAsString(updateOrderResponse)
+        );
     }
 
 }

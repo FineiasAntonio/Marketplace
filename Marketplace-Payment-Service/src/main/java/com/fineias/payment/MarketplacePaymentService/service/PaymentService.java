@@ -1,6 +1,8 @@
 package com.fineias.payment.MarketplacePaymentService.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fineias.payment.MarketplacePaymentService.dto.OrderRequest;
+import com.fineias.payment.MarketplacePaymentService.dto.StatusResponse;
 import com.fineias.payment.MarketplacePaymentService.mapper.PaymentOrderResponseMapper;
 import com.fineias.payment.MarketplacePaymentService.producer.PaymentResponseProducer;
 import com.mercadopago.MercadoPagoConfig;
@@ -15,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class PaymentService {
     private PaymentResponseProducer paymentResponseProducer;
     @Autowired
     private PaymentOrderResponseMapper paymentMapper;
+    @Autowired
+    private MercadoPagoAdapter mercadoPagoAdapter;
 
     @Value("${mercadopago.acesstoken}")
     private String MERCADOPAGO_ACESS_TOKEN;
@@ -47,7 +50,7 @@ public class PaymentService {
 
         StringBuilder description = new StringBuilder();
         orderRequest.productInfoList().forEach(product -> {
-            description.append("%s - %s (%d)\n".formatted(product.productName(), product.price().toString(), product.quantity()));
+            description.append("%s - %s (%dx)\n".formatted(product.productName(), product.price().toString(), product.quantity()));
         });
 
         PaymentCreateRequest paymentCreateRequest =
@@ -64,9 +67,26 @@ public class PaymentService {
                         .build();
 
         Payment paymentResponse = client.create(paymentCreateRequest, requestOptions);
+
         try {
-            paymentMapper.toCreateResponse(paymentResponse);
-        } catch (IOException e) {
+            paymentResponseProducer.createOrderResponseProduce(
+                    paymentMapper.toCreateResponse(paymentResponse, orderRequest)
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void updatePaymentOrder(String webhookBodyContent) {
+        if (webhookBodyContent.contains("payment.created")) {
+            return;
+        }
+
+        StatusResponse statusResponse = mercadoPagoAdapter.returnPaymentOrderById(webhookBodyContent);
+        try {
+            paymentResponseProducer.updateOrderResponseProduce(paymentMapper.toUpdateResponse(statusResponse));
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }

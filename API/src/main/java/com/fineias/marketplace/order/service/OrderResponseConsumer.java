@@ -3,7 +3,7 @@ package com.fineias.marketplace.order.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fineias.marketplace.order.dto.CreateOrderResponse;
-import com.fineias.marketplace.order.dto.OrderUpdateRequestDTO;
+import com.fineias.marketplace.order.dto.UpdateOrderResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -21,10 +21,20 @@ public class OrderResponseConsumer {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @RabbitListener(queues = {CREATE_ORDER_RESPONSE_QUEUE})
-    public void listenMessage(@Payload String payload) {
+    public void listenCreateOrderMessage(@Payload String payload) {
         try {
             CreateOrderResponse createOrderResponse = objectMapper.readValue(payload, CreateOrderResponse.class);
             orderService.createOrderRequest(createOrderResponse);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RabbitListener(queues = {UPDATE_ORDER_RESPONSE_QUEUE})
+    public void listenUpdateOrderMessage(@Payload String payload) {
+        try {
+            UpdateOrderResponse updateOrderResponse = objectMapper.readValue(payload, UpdateOrderResponse.class);
+            orderService.updateOrderStatus(updateOrderResponse);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

@@ -17,15 +17,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "orders")
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID orderId;
+    private Long orderId;
 
     private UUID userId;
-    private UUID productId;
-    private int quantity;
     @Enumerated(value = EnumType.STRING)
     private PaymentType paymentType;
     private BigDecimal totalAmount;
@@ -34,5 +32,8 @@ public class Order {
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
+    private String details;
+
+    private String qrCode;
 
 }

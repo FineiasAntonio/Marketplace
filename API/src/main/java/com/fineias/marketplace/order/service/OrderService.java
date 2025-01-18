@@ -3,6 +3,7 @@ package com.fineias.marketplace.order.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fineias.marketplace.exception.GeneralErrorException;
 import com.fineias.marketplace.order.dto.*;
+import com.fineias.marketplace.order.enums.OrderStatus;
 import com.fineias.marketplace.order.enums.PaymentType;
 import com.fineias.marketplace.order.exception.MismatchUserIdException;
 import com.fineias.marketplace.order.model.Order;
@@ -72,15 +73,26 @@ public class OrderService {
         }
     }
 
-    public void createOrderRequest(CreateOrderResponse response) {
+    public void createOrderRequest(CreateOrderResponse createOrderResponse) {
+        Order order = Order.builder()
+                .orderId(createOrderResponse.orderId())
+                .userId(createOrderResponse.userId())
+                .totalAmount(createOrderResponse.totalAmount())
+                .createdAt(LocalDateTime.now())
+                .paymentType(createOrderResponse.paymentType())
+                .orderStatus(OrderStatus.AWAITING)
+                .qrCode(createOrderResponse.qrCode())
+                .build();
+
+        orderRepository.save(order);
 
     }
 
-    public void updateOrderStatus(OrderUpdateRequestDTO requestDTO) {
+    public void updateOrderStatus(UpdateOrderResponse updateOrderResponse) {
 
-        Order order = orderRepository.findById(requestDTO.orderId()).orElseThrow(RuntimeException::new);
-
-        order.setOrderStatus(requestDTO.status());
+        Order order = orderRepository.findById(updateOrderResponse.orderId()).orElseThrow(RuntimeException::new);
+        order.setOrderStatus(OrderStatus.fromString(updateOrderResponse.status()));
+        order.setDetails(updateOrderResponse.details());
         order.setUpdatedAt(LocalDateTime.now());
 
         orderRepository.save(order);

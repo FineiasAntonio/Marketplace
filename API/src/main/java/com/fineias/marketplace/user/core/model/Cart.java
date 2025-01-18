@@ -17,6 +17,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID cartId;
 
-    @OneToMany(mappedBy = "cartId")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "cartId")
     private List<CartItem> productList; // maybe, after i can implement binary search
 }
