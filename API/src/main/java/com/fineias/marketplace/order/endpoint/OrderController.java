@@ -1,7 +1,6 @@
 package com.fineias.marketplace.order.endpoint;
 
 import com.fineias.marketplace.order.dto.ClientOrderRequest;
-import com.fineias.marketplace.order.dto.OrderRequest;
 import com.fineias.marketplace.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

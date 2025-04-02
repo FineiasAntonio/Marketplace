@@ -23,14 +23,18 @@ import java.util.List;
 @Service
 public class OrderService {
 
-    @Autowired
     private OrderRequestProducer orderRequestProducer;
-    @Autowired
     private OrderRepository orderRepository;
-    @Autowired
     private UserPort userPort;
-    @Autowired
     private ProductPort productPort;
+
+    @Autowired
+    public OrderService(OrderRequestProducer orderRequestProducer, OrderRepository orderRepository, UserPort userPort, ProductPort productPort) {
+        this.orderRequestProducer = orderRequestProducer;
+        this.orderRepository = orderRepository;
+        this.userPort = userPort;
+        this.productPort = productPort;
+    }
 
     public void sendOrderRequest(ClientOrderRequest clientOrderRequest) {
 

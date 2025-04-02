@@ -9,7 +9,9 @@ import com.fineias.marketplace.user.core.model.User;
 import com.fineias.marketplace.user.repository.CartRepository;
 import com.fineias.marketplace.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,14 +20,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
-    private final CartRepository cartRepository;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private PasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+    private CartRepository cartRepository;
+    private JwtService jwtService;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    public AuthenticationService(PasswordEncoder passwordEncoder, UserRepository userRepository, CartRepository cartRepository, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+    }
 
     @Transactional
     public String registerNewUser(RegisterRequestDTO registerRequest) {

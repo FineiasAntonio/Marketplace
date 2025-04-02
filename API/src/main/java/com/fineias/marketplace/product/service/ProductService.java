@@ -23,10 +23,14 @@ import java.util.UUID;
 @Log4j2
 public class ProductService {
 
-    @Autowired
     private ProductRepository productRepository;
-    @Autowired
     private UserPort userPort;
+
+    @Autowired
+    public ProductService(ProductRepository productRepository, UserPort userPort) {
+        this.productRepository = productRepository;
+        this.userPort = userPort;
+    }
 
     public Page<ProductSummaryResponseDTO> findProductByKeyword(String searchTerm, int page, int size) {
 

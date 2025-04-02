@@ -18,9 +18,16 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    @Autowired private UserRepository userRepository;
-    @Autowired private UserMapper userMapper;
-    @Autowired private ProductPort productPort;
+    private UserRepository userRepository;
+    private UserMapper userMapper;
+    private ProductPort productPort;
+
+    @Autowired
+    public UserService(UserRepository userRepository, UserMapper userMapper, ProductPort productPort) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.productPort = productPort;
+    }
 
     public User getAuthenticatedUser() {
         var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

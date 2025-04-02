@@ -19,14 +19,18 @@ import java.util.UUID;
 @Log4j2
 public class CartService {
 
-    @Autowired
     private CartRepository cartRepository;
-    @Autowired
     private CartItemRepository cartItemRepository;
-    @Autowired
     private UserService userService;
-    @Autowired
     private ProductPort productPort;
+
+    @Autowired
+    public CartService(CartRepository cartRepository, CartItemRepository cartItemRepository, UserService userService, ProductPort productPort) {
+        this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
+        this.userService = userService;
+        this.productPort = productPort;
+    }
 
     @Transactional
     public void putItemsCart(ProductCartDetailsDTO productCartDetailsDTO) {
